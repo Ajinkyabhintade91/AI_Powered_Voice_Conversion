@@ -24,6 +24,7 @@ function VoiceRecorder() {
     };
 
     const startRecording = () => {
+        audioChunks.current = [];
         navigator.mediaDevices.getUserMedia({ audio: true })
             .then(stream => {
                 mediaRecorder.current = new MediaRecorder(stream);
@@ -72,20 +73,14 @@ function VoiceRecorder() {
         });
     };
 
-    // return (
-    //     <div className="voice-recorder">
-    //         <button onClick={startRecording} disabled={recording}><FaMicrophone /></button>
-    //         <button onClick={stopRecording} disabled={!recording}><FaStop /></button>
-    //         {audioURL && <audio src={audioURL} controls />}
-    //         {audioURL && <button onClick={saveRecording}><FaSave /></button>}
-    //     </div>
-    // );
     return (
         <div className="voice-recorder">
-            <button onClick={startRecording} disabled={recording}><FaMicrophone /></button>
+            {/* <button onClick={startRecording} disabled={recording}><FaMicrophone /></button> */}
+            <button onClick={startRecording} disabled={recording} style={recording ? {backgroundColor: 'red'} : {}}><FaMicrophone /></button>
             <button onClick={stopRecording} disabled={!recording}><FaStop /></button>
             {audioURL && <audio src={audioURL} controls />}
-            {audioURL && <button onClick={saveRecording}><FaSave /></button>}
+            {audioURL && <button onClick={saveRecording} disabled={!audioURL}><FaSave /></button>}
+            {/* {audioURL && <button onClick={saveRecording}><FaSave /></button>} */}
         </div>
     );
 }
