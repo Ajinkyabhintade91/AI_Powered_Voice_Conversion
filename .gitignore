@@ -7,6 +7,9 @@
 
 # testing
 /coverage
+/venv
+/recordings
+/uploads
 
 # production
 /build
