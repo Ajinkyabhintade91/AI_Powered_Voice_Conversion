@@ -74,13 +74,11 @@ function VoiceRecorder() {
     };
 
     return (
-        <div className="voice-recorder">
-            {/* <button onClick={startRecording} disabled={recording}><FaMicrophone /></button> */}
+        <div className="voice-recorder">         
             <button onClick={startRecording} disabled={recording} style={recording ? {backgroundColor: 'red'} : {}}><FaMicrophone /></button>
             <button onClick={stopRecording} disabled={!recording}><FaStop /></button>
             {audioURL && <audio src={audioURL} controls />}
-            {audioURL && <button onClick={saveRecording} disabled={!audioURL}><FaSave /></button>}
-            {/* {audioURL && <button onClick={saveRecording}><FaSave /></button>} */}
+            {audioURL && <button onClick={saveRecording} disabled={!audioURL}><FaSave /></button>}            
         </div>
     );
 }

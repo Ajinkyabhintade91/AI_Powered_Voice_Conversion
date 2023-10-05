@@ -23,13 +23,7 @@ def upload_file():
     file = request.files['file']
     if file.filename == '':
         return jsonify(message='No selected file'), 400
-    # if file and allowed_file(file.filename):
-    #     securename = secure_filename(file.filename)
-    #     filename = os.path.join(UPLOAD_FOLDER, securename)
-    #     file.save(filename)
-    #     return jsonify(message='File successfully uploaded'), 200
-    # else:
-    #     return jsonify(message='File type not allowed'), 400
+
     if file and allowed_file(file.filename):
         securename = secure_filename(file.filename)
         # Append current timestamp to filename to make it unique
