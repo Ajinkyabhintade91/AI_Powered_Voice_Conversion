@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect  } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { FaMicrophone, FaStop, FaSave } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -49,6 +49,7 @@ function VoiceRecorder() {
         setRecording(false);
     };
 
+
     const saveRecording = () => {
         const fileType = prompt("Which file type would you like to save as? (wav/webm)", "wav");
         if (!allowed_file(`file.${fileType}`)) {
@@ -59,26 +60,35 @@ function VoiceRecorder() {
         const formData = new FormData();
         formData.append('file', new Blob(audioChunks.current, { type: `audio/${fileType}` }), `recording.${fileType}`);
 
-        fetch('http://localhost:5000/upload', {
+        fetch('http://localhost:5000/segment', {
             method: 'POST',
             body: formData
         })
-        .then(response => response.json())
-        .then(data => {
-            toast.success(data.message);
-        })
-        .catch(error => {
-            console.error("Error uploading recording:", error);
-            toast.error("Error uploading recording.");
-        });
+            .then(response => response.json())
+            .then(data => {
+                toast.success(data.message);
+
+                // Use data.vocal_path and data.accompaniment_path as needed
+                // For example, you can create audio elements to play the separated tracks
+                const vocalAudio = new Audio(data.vocal_path);
+                const accompanimentAudio = new Audio(data.accompaniment_path);
+
+                // Play the separated tracks if desired
+                vocalAudio.play();
+                accompanimentAudio.play();
+            })
+            .catch(error => {
+                console.error("Error segmenting recording:", error);
+                toast.error("Error segmenting recording.");
+            });
     };
 
     return (
-        <div className="voice-recorder">         
-            <button onClick={startRecording} disabled={recording} style={recording ? {backgroundColor: 'red'} : {}}><FaMicrophone /></button>
+        <div className="voice-recorder">
+            <button onClick={startRecording} disabled={recording} style={recording ? { backgroundColor: 'red' } : {}}><FaMicrophone /></button>
             <button onClick={stopRecording} disabled={!recording}><FaStop /></button>
             {audioURL && <audio src={audioURL} controls />}
-            {audioURL && <button onClick={saveRecording} disabled={!audioURL}><FaSave /></button>}            
+            {audioURL && <button onClick={saveRecording} disabled={!audioURL}><FaSave /></button>}
         </div>
     );
 }
